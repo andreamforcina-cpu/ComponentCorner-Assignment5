@@ -56,12 +56,24 @@ function App() {
   ];
 
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem("cart");
+      const parsed = savedCart ? JSON.parse(savedCart) : [];
+      return Array.isArray(parsed) && parsed.every((item) =>
+        item && typeof item.id === "number" &&
+        typeof item.name === "string" && typeof item.price === "number"
+      ) ? parsed : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch {
+      // Shopping still works when browser storage is unavailable.
+    }
   }, [cart]);
 
   const addToCart = (product) => {

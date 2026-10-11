@@ -4,6 +4,7 @@ function CartItem({ item, onRemove }) {
       <div>
         <h3>{item.name}</h3>
         <p>${item.price.toFixed(2)}</p>
+        <p>Quantity: {item.quantity ?? 1}</p>
       </div>
 
       <button onClick={() => onRemove(item.id)}>
